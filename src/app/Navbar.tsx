@@ -11,10 +11,7 @@ export default function Navbar() {
   const { theme } = useTheme();
   return (
     <header className="border-primary sticky top-0 right-0 z-50 flex justify-between border-b bg-black/5 py-4 backdrop-blur-md md:px-10">
-      <Link
-        href={"/"}
-        className="flex items-center gap-2 rounded-md bg-gradient-to-b from-black/10 via-transparent to-black/10 px-4 py-1"
-      >
+      <Link href={"/"} className="flex items-center gap-2 rounded-md px-4 py-1">
         <Image
           src="/logo.png"
           width={36}

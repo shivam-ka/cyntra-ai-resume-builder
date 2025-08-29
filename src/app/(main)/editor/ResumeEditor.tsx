@@ -1,10 +1,25 @@
-import { Button } from "@/components/ui/button";
-import { Loader } from "lucide-react";
+"use client";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import PersonalInfoForm from "./forms/PerfonalInfoForm";
-import GeneralInfoForm from "./forms/GeneralInfoForm";
+import { useSearchParams } from "next/navigation";
+import { steps } from "./steps";
+import Breadcrumbs from "./Breadcrumbs";
+import Footer from "./Footer";
 
 export default function ResumeEditor() {
+  const searchParams = useSearchParams();
+
+  const currentStep = searchParams.get("step") || steps[0].key;
+
+  function setSteps(key: string) {
+    const newSearchParams = new URLSearchParams(searchParams);
+    newSearchParams.set("step", key);
+    window.history.pushState(null, "", `?${newSearchParams.toString()}`);
+  }
+
+  const FormComponent = steps.find(
+    (step) => step.key === currentStep
+  )?.components;
+
   return (
     <div className="flex min-h-screen flex-col">
       <header className="border-b px-4 py-4 sm:px-6">
@@ -24,8 +39,11 @@ export default function ResumeEditor() {
           {/* Left Panel */}
           <div className="w-full p-4 sm:p-6 md:w-1/2">
             <ScrollArea className="h-full pr-4">
-              {/* <GeneralInfoForm /> */}
-              <PersonalInfoForm />
+              <Breadcrumbs
+                currentStep={currentStep}
+                setCurrectStep={setSteps}
+              />
+              {FormComponent && <FormComponent />}
             </ScrollArea>
           </div>
 
@@ -39,25 +57,7 @@ export default function ResumeEditor() {
         </div>
       </main>
 
-      <footer className="border-t border-gray-200 px-4 py-4 sm:px-6">
-        <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-          <div className="flex w-full justify-between gap-2 sm:w-fit">
-            <Button variant="secondary" className="min-w-24">
-              Previous Step
-            </Button>
-            <Button className="min-w-24">Next Step</Button>
-          </div>
-
-          <div className="flex w-full items-center justify-end gap-4 sm:w-fit">
-            <p className="flex items-center gap-1 text-sm">
-              <Loader className="size-3.5 animate-spin" /> Saving...
-            </p>
-            <Button variant="secondary" className="min-w-20">
-              Close
-            </Button>
-          </div>
-        </div>
-      </footer>
+      <Footer currentStep={currentStep} setCurrectStep={setSteps} />
     </div>
   );
 }
