@@ -12,15 +12,30 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { generalInfoSchema, GeneralInfoValues } from "@/lib/validation";
+import { EditorFormPorps } from "@/lib/types";
+import { useEffect } from "react";
 
-export default function GeneralInfoForm() {
+export default function GeneralInfoForm({
+  resumeData,
+  setResumeData,
+}: EditorFormPorps) {
   const form = useForm<GeneralInfoValues>({
     resolver: zodResolver(generalInfoSchema),
     defaultValues: {
-      title: "",
-      description: "",
+      title: resumeData.title || "",
+      description: resumeData.description || "",
     },
   });
+
+  useEffect(() => {
+    const { unsubscribe } = form.watch(async (values) => {
+      const isValid = await form.trigger();
+      if (!isValid) return;
+      setResumeData({ ...resumeData, ...values });
+    });
+
+    return unsubscribe;
+  }, [form, resumeData, setResumeData]);
 
   return (
     <div>

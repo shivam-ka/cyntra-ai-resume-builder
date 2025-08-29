@@ -4,9 +4,13 @@ import { useSearchParams } from "next/navigation";
 import { steps } from "./steps";
 import Breadcrumbs from "./Breadcrumbs";
 import Footer from "./Footer";
+import { useState } from "react";
+import { ResumeValue } from "@/lib/validation";
 
 export default function ResumeEditor() {
   const searchParams = useSearchParams();
+
+  const [resumeData, setResumeData] = useState<ResumeValue>({});
 
   const currentStep = searchParams.get("step") || steps[0].key;
 
@@ -43,7 +47,12 @@ export default function ResumeEditor() {
                 currentStep={currentStep}
                 setCurrectStep={setSteps}
               />
-              {FormComponent && <FormComponent />}
+              {FormComponent && (
+                <FormComponent
+                  resumeData={resumeData}
+                  setResumeData={setResumeData}
+                />
+              )}
             </ScrollArea>
           </div>
 
@@ -52,7 +61,9 @@ export default function ResumeEditor() {
 
           {/* Right Panel */}
           <div className="hidden w-1/2 p-4 sm:p-6 md:block">
-            <ScrollArea className="h-full pl-4"></ScrollArea>
+            <ScrollArea className="h-full pl-4">
+              <pre>{JSON.stringify(resumeData, null, 2)}</pre>
+            </ScrollArea>
           </div>
         </div>
       </main>

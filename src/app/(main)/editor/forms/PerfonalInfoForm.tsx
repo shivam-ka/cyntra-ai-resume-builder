@@ -12,34 +12,38 @@ import {
 import { Input } from "@/components/ui/input";
 import { personalInfoSchema, PersonalInfoValues } from "@/lib/validation";
 import { useEffect } from "react";
+import { EditorFormPorps } from "@/lib/types";
 
-export default function PersonalInfoForm() {
+export default function PersonalInfoForm({
+  resumeData,
+  setResumeData,
+}: EditorFormPorps) {
   const form = useForm<PersonalInfoValues>({
     resolver: zodResolver(personalInfoSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      city: "",
-      country: "",
-      email: "",
-      jobTitle: "",
-      phone: "",
+      firstName: resumeData.firstName || "",
+      lastName: resumeData.lastName || "",
+      jobTitle: resumeData.jobTitle || "",
+      city: resumeData.city || "",
+      country: resumeData.country || "",
+      phone: resumeData.phone || "",
+      email: resumeData.email || "",
     },
   });
 
   useEffect(() => {
-    const { unsubscribe } = form.watch(async () => {
+    const { unsubscribe } = form.watch(async (values) => {
       const isValid = await form.trigger();
       if (!isValid) return;
+      setResumeData({ ...resumeData, ...values });
     });
 
     return unsubscribe;
-  }, [form]);
+  }, [form, resumeData, setResumeData]);
 
   return (
     <div>
-
-      <div className="mb-8 space-y-2 ">
+      <div className="mb-8 space-y-2">
         <h2 className="text-2xl font-semibold tracking-tight">Personal Info</h2>
         <p className="text-muted-foreground text-sm">
           This will appear in your resume
@@ -51,6 +55,7 @@ export default function PersonalInfoForm() {
           <FormField
             control={form.control}
             name="photo"
+            // eslint-disable-next-line
             render={({ field: { value, ...fieldValues } }) => (
               <FormItem className="space-y-1">
                 <FormLabel>Your Photo</FormLabel>
