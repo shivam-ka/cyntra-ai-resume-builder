@@ -12,7 +12,7 @@ model Resume {
   id           String  @id @default(auto()) @map("_id") @db.ObjectId
   userId       String
   title        String?
-  descrition   String?
+  description  String?
   photoUrl     String?
   colorHex     String  @default("#000000")
   borderRadius Int     @default(0)
@@ -25,8 +25,28 @@ model Resume {
   phone        String?
   email        String?
 
+  workExperience WorkExperience[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("resumes")
+}
+
+model WorkExperience {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  position    String?
+  company     String?
+  startDate   DateTime?
+  endDate     DateTime?
+  description String?
+
+  resumeId String @db.ObjectId
+  resume   Resume @relation(fields: [resumeId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("workExperiences")
 }
