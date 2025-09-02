@@ -26,6 +26,8 @@ model Resume {
   email        String?
 
   workExperience WorkExperience[]
+  Education      Education[]
+  skills         String[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -49,4 +51,19 @@ model WorkExperience {
   updatedAt DateTime @updatedAt
 
   @@map("workExperiences")
+}
+
+model Education {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  degree    String?
+  school    String?
+  startDate DateTime?
+  endDate   DateTime?
+
+  resumeId String @db.ObjectId
+  resume   Resume @relation(fields: [resumeId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

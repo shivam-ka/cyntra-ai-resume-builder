@@ -1,8 +1,5 @@
 "use client";
-import { EditorFormPorps } from "@/lib/types";
-import { workExperienceSchema, WorkExperienceValue } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
 import { useFieldArray, useForm, UseFormReturn } from "react-hook-form";
 import {
   Form,
@@ -11,21 +8,22 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-  FormDescription,
 } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
-import { BriefcaseBusiness, GripHorizontal } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { EditorFormPorps } from "@/lib/types";
+import { educationSchema, EducationValues } from "@/lib/validation";
+import { useEffect } from "react";
+import { BriefcaseBusiness, GripHorizontal } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-export default function WorkExperiencForm({
+export default function EducationForm({
   resumeData,
   setResumeData,
 }: EditorFormPorps) {
-  const form = useForm<WorkExperienceValue>({
-    resolver: zodResolver(workExperienceSchema),
+  const form = useForm<EducationValues>({
+    resolver: zodResolver(educationSchema),
     defaultValues: {
-      workExperience: resumeData.workExperience || [],
+      education: resumeData.education || [],
     },
   });
 
@@ -35,9 +33,8 @@ export default function WorkExperiencForm({
       if (!isValid) return;
       setResumeData({
         ...resumeData,
-        workExperience: values.workExperience?.filter(
-          (exp) => exp !== undefined
-        ),
+        workExperience:
+          values.education?.filter((edu) => edu !== undefined) || [],
       });
     });
 
@@ -46,42 +43,40 @@ export default function WorkExperiencForm({
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
-    name: "workExperience",
+    name: "education",
   });
 
   return (
     <div>
       <div className="mb-8 space-y-2">
-        <h2 className="text-2xl font-semibold tracking-tight">
-          Work Experience
-        </h2>
+        <h2 className="text-2xl font-semibold tracking-tight">Eduction</h2>
         <p className="text-muted-foreground text-sm">
-          Add your work Experience
+          This will not appear in your resume
         </p>
       </div>
+
       <Form {...form}>
         <form className="space-y-6">
           {fields.map((field, index) => (
-            <WorkExperienceItem
-              key={field.id}
-              index={index}
+            <EducationItem
               form={form}
+              index={index}
               remove={remove}
+              key={field.id}
             />
           ))}
           <Button
             type="button"
             onClick={() =>
               append({
-                company: "",
-                description: "",
+                degree: "",
                 startDate: "",
                 endDate: "",
-                position: "",
+                school: "",
               })
             }
           >
-            Add Work Experience
+            Add Education
           </Button>
         </form>
       </Form>
@@ -89,19 +84,19 @@ export default function WorkExperiencForm({
   );
 }
 
-interface WorkExperienceItemProps {
-  form: UseFormReturn<WorkExperienceValue>;
+interface EducationItemProps {
+  form: UseFormReturn<EducationValues>;
   index: number;
   remove: (index: number) => void;
 }
 
-function WorkExperienceItem({ form, index, remove }: WorkExperienceItemProps) {
+function EducationItem({ form, index, remove }: EducationItemProps) {
   return (
     <div className="border-muted-foreground space-y-5 rounded-sm border px-4 py-4">
       <div className="flex items-center justify-between">
         <span className="flex items-center gap-1 font-semibold">
           <BriefcaseBusiness className="size-4" />
-          Work Experience - {index + 1}
+          Education - {index + 1}
         </span>
         <span title="move ">
           <GripHorizontal className="size-5 cursor-grab active:cursor-grabbing" />
@@ -110,35 +105,28 @@ function WorkExperienceItem({ form, index, remove }: WorkExperienceItemProps) {
 
       <FormField
         control={form.control}
-        name={`workExperience.${index}.position`}
+        name={`education.${index}.degree`}
         render={({ field }) => (
-          <FormItem className="space-y-1">
-            <FormLabel className="text-sm font-medium">Job Title</FormLabel>
+          <FormItem>
+            <FormLabel>Degree</FormLabel>
             <FormControl>
-              <Input
-                {...field}
-                className="w-full"
-                placeholder="Enter your job title"
-                autoFocus
-              />
+              <Input {...field} autoFocus />
             </FormControl>
+            <FormMessage />
           </FormItem>
         )}
       />
 
       <FormField
         control={form.control}
-        name={`workExperience.${index}.company`}
+        name={`education.${index}.school`}
         render={({ field }) => (
-          <FormItem className="space-y-1">
-            <FormLabel className="text-sm font-medium">Company</FormLabel>
+          <FormItem>
+            <FormLabel>School</FormLabel>
             <FormControl>
-              <Input
-                {...field}
-                className="w-full"
-                placeholder="Enter company name"
-              />
+              <Input {...field} autoFocus />
             </FormControl>
+            <FormMessage />
           </FormItem>
         )}
       />
@@ -146,7 +134,7 @@ function WorkExperienceItem({ form, index, remove }: WorkExperienceItemProps) {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <FormField
           control={form.control}
-          name={`workExperience.${index}.startDate`}
+          name={`education.${index}.startDate`}
           render={({ field }) => (
             <FormItem className="space-y-1">
               <FormLabel className="text-sm font-medium">Start Date</FormLabel>
@@ -158,13 +146,14 @@ function WorkExperienceItem({ form, index, remove }: WorkExperienceItemProps) {
                   className="w-full"
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
 
         <FormField
           control={form.control}
-          name={`workExperience.${index}.endDate`}
+          name={`education.${index}.endDate`}
           render={({ field }) => (
             <FormItem className="space-y-1">
               <FormLabel className="text-sm font-medium">End Date</FormLabel>
@@ -176,32 +165,11 @@ function WorkExperienceItem({ form, index, remove }: WorkExperienceItemProps) {
                   className="w-full"
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
       </div>
-
-      <FormDescription className="text-xs">
-        Leave <span className="font-medium">End Date</span> empty if you are
-        currently working here.
-      </FormDescription>
-
-      <FormField
-        control={form.control}
-        name={`workExperience.${index}.description`}
-        render={({ field }) => (
-          <FormItem className="space-y-1">
-            <FormLabel className="text-sm font-medium">Description</FormLabel>
-            <FormControl>
-              <Textarea
-                {...field}
-                className="w-full"
-                placeholder="Describe your role and responsibilities"
-              />
-            </FormControl>
-          </FormItem>
-        )}
-      />
 
       <Button
         variant="destructive"
