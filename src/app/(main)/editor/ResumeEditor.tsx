@@ -6,6 +6,7 @@ import Breadcrumbs from "./Breadcrumbs";
 import Footer from "./Footer";
 import { useState } from "react";
 import { ResumeValue } from "@/lib/validation";
+import ResumePreviewSection from "./ResumePreviewSection";
 
 export default function ResumeEditor() {
   const searchParams = useSearchParams();
@@ -62,7 +63,7 @@ export default function ResumeEditor() {
           {/* Right Panel */}
           <div className="hidden w-1/2 p-4 sm:p-6 md:block">
             <ScrollArea className="h-full pl-4">
-              <pre>{JSON.stringify(resumeData, null, 2)}</pre>
+             <ResumePreviewSection resumeData={resumeData}  setResumeData={setResumeData} />
             </ScrollArea>
           </div>
         </div>

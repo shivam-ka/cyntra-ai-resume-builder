@@ -65,7 +65,10 @@ export default function PersonalInfoForm({
                     type="file"
                     accept="image/*"
                     placeholder="Upload your photo"
-                    onChange={(e) => fieldValues.onChange(e)}
+                    onChange={(e) =>{ 
+                      const file = e.target.files?.[0]
+                      fieldValues.onChange(file)
+                    }}
                   />
                 </FormControl>
                 <FormMessage />
