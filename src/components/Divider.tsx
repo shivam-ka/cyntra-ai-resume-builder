@@ -1,3 +1,14 @@
-export default function Divider(){
-    return <hr className="border border-neutral-700" />
+export default function Divider({
+  colorHex,
+}: {
+  colorHex: string | undefined;
+}) {
+  return (
+    <hr
+      style={{
+        borderColor: colorHex,
+      }}
+      className="border border-neutral-700"
+    />
+  );
 }

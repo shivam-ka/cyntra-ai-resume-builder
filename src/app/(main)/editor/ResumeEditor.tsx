@@ -7,6 +7,8 @@ import Footer from "./Footer";
 import { useState } from "react";
 import { ResumeValue } from "@/lib/validation";
 import ResumePreviewSection from "./ResumePreviewSection";
+import ColorPicker from "./ColorPicker";
+import BorderStyle from "./BorderStyle";
 
 export default function ResumeEditor() {
   const searchParams = useSearchParams();
@@ -61,9 +63,25 @@ export default function ResumeEditor() {
           <div className="hidden border-l border-gray-200 md:block" />
 
           {/* Right Panel */}
-          <div className="hidden w-1/2 p-4 sm:p-6 md:block">
+          <div className="relative hidden w-1/2 p-4 sm:p-6 md:block">
+            <div className="absolute top-1 left-1 z-50 flex flex-none flex-col gap-3 lg:top-3 lg:left-3">
+              <ColorPicker
+                color={resumeData.colorHex}
+                onChange={(color) =>
+                  setResumeData({ ...resumeData, colorHex: color.hex })
+                }
+              />
+              <BorderStyle
+                onChange={(Radious) => {
+                  setResumeData({ ...resumeData, borderRadius: Radious });
+                }}
+              />
+            </div>
             <ScrollArea className="h-full pl-4">
-             <ResumePreviewSection resumeData={resumeData}  setResumeData={setResumeData} />
+              <ResumePreviewSection
+                resumeData={resumeData}
+                setResumeData={setResumeData}
+              />
             </ScrollArea>
           </div>
         </div>
