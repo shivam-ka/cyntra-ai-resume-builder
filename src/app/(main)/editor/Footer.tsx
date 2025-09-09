@@ -1,13 +1,20 @@
 import { Button } from "@/components/ui/button";
-import { Loader } from "lucide-react";
+import { FileUserIcon, Loader, PenLineIcon } from "lucide-react";
 import { steps } from "./steps";
 
 interface FooterProps {
   currentStep: string;
   setCurrectStep: (step: string) => void;
+  showSmResumePreview: boolean;
+  setShowSmResumePreview: (show: boolean) => void;
 }
 
-export default function Footer({ currentStep, setCurrectStep }: FooterProps) {
+export default function Footer({
+  currentStep,
+  setCurrectStep,
+  showSmResumePreview,
+  setShowSmResumePreview,
+}: FooterProps) {
   const previousStep = steps.find(
     (_, index) => steps[index + 1]?.key === currentStep
   )?.key;
@@ -45,6 +52,21 @@ export default function Footer({ currentStep, setCurrectStep }: FooterProps) {
           </p>
           <Button variant="secondary" className="min-w-20">
             Close
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => setShowSmResumePreview(!showSmResumePreview)}
+            className="md:hidden"
+          >
+            {showSmResumePreview ? (
+              <>
+                Hide Preview <PenLineIcon />
+              </>
+            ) : (
+              <>
+                Shwo Preview <FileUserIcon />
+              </>
+            )}
           </Button>
         </div>
       </div>

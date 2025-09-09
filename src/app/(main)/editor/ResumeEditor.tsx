@@ -9,11 +9,13 @@ import { ResumeValue } from "@/lib/validation";
 import ResumePreviewSection from "./ResumePreviewSection";
 import ColorPicker from "./ColorPicker";
 import BorderStyle from "./BorderStyle";
+import { cn } from "@/lib/utils";
 
 export default function ResumeEditor() {
   const searchParams = useSearchParams();
 
   const [resumeData, setResumeData] = useState<ResumeValue>({});
+  const [showSmResumePreview, setShowSmResumePreview] = useState(false);
 
   const currentStep = searchParams.get("step") || steps[0].key;
 
@@ -44,7 +46,12 @@ export default function ResumeEditor() {
       <main className="relative min-h-[65vh] sm:flex-grow">
         <div className="absolute inset-0 flex border-t border-gray-200">
           {/* Left Panel */}
-          <div className="w-full p-4 sm:p-6 md:w-1/2">
+          <div
+            className={cn(
+              "w-full p-4 sm:p-6 md:block md:w-1/2",
+              showSmResumePreview && "hidden"
+            )}
+          >
             <ScrollArea className="h-full pr-4">
               <Breadcrumbs
                 currentStep={currentStep}
@@ -63,8 +70,13 @@ export default function ResumeEditor() {
           <div className="hidden border-l border-gray-200 md:block" />
 
           {/* Right Panel */}
-          <div className="relative hidden w-1/2 p-4 sm:p-6 md:block">
-            <div className="absolute top-1 left-1 z-50 flex flex-none flex-col gap-3 lg:top-3 lg:left-3">
+          <div
+            className={cn(
+              "relative hidden w-1/2 p-4 sm:p-6 md:block",
+              showSmResumePreview && "block w-full"
+            )}
+          >
+            <div className="absolute top-1 right-2 z-50 flex flex-none flex-col gap-3 md:left-1 lg:top-3 lg:left-3">
               <ColorPicker
                 color={resumeData.colorHex}
                 onChange={(color) =>
@@ -77,7 +89,7 @@ export default function ResumeEditor() {
                 }}
               />
             </div>
-            <ScrollArea className="h-full pl-4">
+            <ScrollArea className="h-full md:pl-4">
               <ResumePreviewSection
                 resumeData={resumeData}
                 setResumeData={setResumeData}
@@ -87,7 +99,12 @@ export default function ResumeEditor() {
         </div>
       </main>
 
-      <Footer currentStep={currentStep} setCurrectStep={setSteps} />
+      <Footer
+        currentStep={currentStep}
+        setCurrectStep={setSteps}
+        showSmResumePreview={showSmResumePreview}
+        setShowSmResumePreview={setShowSmResumePreview}
+      />
     </div>
   );
 }
