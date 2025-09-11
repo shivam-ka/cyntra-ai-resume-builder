@@ -10,12 +10,17 @@ import ResumePreviewSection from "./ResumePreviewSection";
 import ColorPicker from "./ColorPicker";
 import BorderStyle from "./BorderStyle";
 import { cn } from "@/lib/utils";
+import useAutoSaveResume from "./useAutoSaveResume";
+import useUnLoadWarning from "@/hooks/useUnLoadWarning";
 
 export default function ResumeEditor() {
   const searchParams = useSearchParams();
 
   const [resumeData, setResumeData] = useState<ResumeValue>({});
   const [showSmResumePreview, setShowSmResumePreview] = useState(false);
+
+  const { isSaving, hasUnsavedChanges } = useAutoSaveResume(resumeData);
+  useUnLoadWarning(hasUnsavedChanges);
 
   const currentStep = searchParams.get("step") || steps[0].key;
 
@@ -104,6 +109,7 @@ export default function ResumeEditor() {
         setCurrectStep={setSteps}
         showSmResumePreview={showSmResumePreview}
         setShowSmResumePreview={setShowSmResumePreview}
+        isSaving={isSaving}
       />
     </div>
   );

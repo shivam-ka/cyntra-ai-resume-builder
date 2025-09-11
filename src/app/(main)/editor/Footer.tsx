@@ -7,6 +7,7 @@ interface FooterProps {
   setCurrectStep: (step: string) => void;
   showSmResumePreview: boolean;
   setShowSmResumePreview: (show: boolean) => void;
+  isSaving: boolean;
 }
 
 export default function Footer({
@@ -14,6 +15,7 @@ export default function Footer({
   setCurrectStep,
   showSmResumePreview,
   setShowSmResumePreview,
+  isSaving,
 }: FooterProps) {
   const previousStep = steps.find(
     (_, index) => steps[index + 1]?.key === currentStep
@@ -47,9 +49,11 @@ export default function Footer({
         </div>
 
         <div className="flex w-full items-center justify-end gap-4 sm:w-fit">
-          <p className="flex items-center gap-1 text-sm">
-            <Loader className="size-3.5 animate-spin" /> Saving...
-          </p>
+          {isSaving && (
+            <p className="flex items-center gap-1 text-sm">
+              <Loader className="size-3.5 animate-spin" /> Saving...
+            </p>
+          )}
           <Button variant="secondary" className="min-w-20">
             Close
           </Button>
@@ -68,6 +72,7 @@ export default function Footer({
               </>
             )}
           </Button>
+          
         </div>
       </div>
     </footer>

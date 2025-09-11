@@ -1,4 +1,4 @@
-import useDimension from "@/hooks/userDimension";
+import useDimension from "@/hooks/useDimension";
 import { cn } from "@/lib/utils";
 import { ResumeValue } from "@/lib/validation";
 import Image from "next/image";
