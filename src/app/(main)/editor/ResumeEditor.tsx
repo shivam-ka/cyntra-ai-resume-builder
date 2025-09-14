@@ -9,14 +9,21 @@ import { ResumeValue } from "@/lib/validation";
 import ResumePreviewSection from "./ResumePreviewSection";
 import ColorPicker from "./ColorPicker";
 import BorderStyle from "./BorderStyle";
-import { cn } from "@/lib/utils";
+import { cn, mapToResumeValues } from "@/lib/utils";
 import useAutoSaveResume from "./useAutoSaveResume";
 import useUnLoadWarning from "@/hooks/useUnLoadWarning";
+import { ResumeServerData } from "@/lib/types";
 
-export default function ResumeEditor() {
+interface ResumeEditorProps {
+  resumeToEdit: ResumeServerData | null;
+}
+
+export default function ResumeEditor({ resumeToEdit }: ResumeEditorProps) {
   const searchParams = useSearchParams();
 
-  const [resumeData, setResumeData] = useState<ResumeValue>({});
+  const [resumeData, setResumeData] = useState<ResumeValue>(
+    resumeToEdit ? mapToResumeValues(resumeToEdit) : {}
+  );
   const [showSmResumePreview, setShowSmResumePreview] = useState(false);
 
   const { isSaving, hasUnsavedChanges } = useAutoSaveResume(resumeData);

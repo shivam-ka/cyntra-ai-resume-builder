@@ -1,3 +1,4 @@
+"use server";
 import { prisma } from "@/lib/prisma";
 import { resumeSchema, ResumeValue } from "@/lib/validation";
 import { auth } from "@clerk/nextjs/server";

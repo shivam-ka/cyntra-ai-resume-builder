@@ -177,12 +177,8 @@ function WorkExperienceItem({
           <BriefcaseBusiness className="size-4 focus:outline-none" />
           Work Experience - {index + 1}
         </span>
-        <span title="move">
-          <GripHorizontal
-            className="size-5 cursor-grab active:cursor-grabbing"
-            {...attributes}
-            {...listeners}
-          />
+        <span {...attributes} {...listeners} title="move">
+          <GripHorizontal className="size-5 cursor-grab active:cursor-grabbing" />
         </span>
       </div>
 
