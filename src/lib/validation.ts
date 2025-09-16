@@ -1,3 +1,4 @@
+import { min } from "date-fns";
 import { z } from "zod";
 
 export const optionalString = z.string().trim().optional().or(z.literal(""));
@@ -48,6 +49,10 @@ export const workExperienceSchema = z.object({
 
 export type WorkExperienceValue = z.infer<typeof workExperienceSchema>;
 
+export type workExperience = NonNullable<
+  z.infer<typeof workExperienceSchema>["workExperience"]
+>[number];
+
 export const educationSchema = z.object({
   education: z
     .array(
@@ -90,6 +95,18 @@ export type ResumeValue = Omit<z.infer<typeof resumeSchema>, "photo"> & {
   id?: string;
   photo?: File | string | null;
 };
+
+export const generateWorkExperienceSchema = z.object({
+  description: z
+    .string()
+    .trim()
+    .min(1, "Required")
+    .min(20, "Must be at least 20 characters"),
+});
+
+export type generateWorkExperienceInput = z.infer<
+  typeof generateWorkExperienceSchema
+>;
 
 export const generateSummarySchema = z.object({
   jobTitle: optionalString,
