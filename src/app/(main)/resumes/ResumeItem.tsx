@@ -14,7 +14,7 @@ import { formatDate } from "date-fns";
 import { MoreVertical, Printer, Trash2Icon } from "lucide-react";
 
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import React, { useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { deleteResume } from "./actions";
 import {
@@ -26,12 +26,20 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import LoadingButton from "@/components/LoadingButton";
+import { useReactToPrint } from "react-to-print";
 
 interface ResumeItemProps {
   resume: ResumeServerData;
 }
 
 export default function ResumeItem({ resume }: ResumeItemProps) {
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  const reactToPrintFn = useReactToPrint({
+    contentRef,
+    documentTitle: resume.title || "New Resume",
+  });
+
   const wasUpdated = resume.updatedAt !== resume.createdAt;
   const router = useRouter();
 
@@ -55,20 +63,25 @@ export default function ResumeItem({ resume }: ResumeItemProps) {
           </p>
         </div>
         <div className="relative inline-block w-full">
-          <ResumePreview resumeData={mapToResumeValues(resume)} />
+          <ResumePreview
+            resumeData={mapToResumeValues(resume)}
+            contentRef={contentRef}
+            className="overflow-hidden"
+          />
           <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-transparent" />
         </div>
       </div>
-      <MoreMenu resumeId={resume.id} />
+      <MoreMenu resumeId={resume.id} onPrintClick={reactToPrintFn} />
     </div>
   );
 }
 
 interface MoreMenuProps {
   resumeId: string;
+  onPrintClick: () => void;
 }
 
-function MoreMenu({ resumeId }: MoreMenuProps) {
+function MoreMenu({ resumeId,onPrintClick }: MoreMenuProps) {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   return (
     <>
@@ -85,7 +98,7 @@ function MoreMenu({ resumeId }: MoreMenuProps) {
         <DropdownMenuContent align="start">
           <DropdownMenuItem
             className="flex items-center gap-2"
-            // onClick={onPrintClick}
+            onClick={onPrintClick}
           >
             <Printer className="size-4" />
             Print

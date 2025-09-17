@@ -9,10 +9,15 @@ import { Badge } from "./ui/badge";
 
 interface ResumeProps {
   resumeData: ResumeValue;
+  contentRef?: React.Ref<HTMLDivElement>;
   className?: string;
 }
 
-export default function ResumePreview({ resumeData, className }: ResumeProps) {
+export default function ResumePreview({
+  resumeData,
+  className,
+  contentRef,
+}: ResumeProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const { width } = useDimension(containerRef);
@@ -30,6 +35,8 @@ export default function ResumePreview({ resumeData, className }: ResumeProps) {
         style={{
           zoom: (1 / 794) * width,
         }}
+        ref={contentRef}
+        id="resumePreviewContent"
       >
         <PersonalInfoHeader resumeData={resumeData} />
         <SummarySection resumeData={resumeData} />

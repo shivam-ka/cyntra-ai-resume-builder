@@ -124,3 +124,19 @@
     font-family: "outfit", sans-serif;
   }
 }
+
+@media print {
+  #resumePreviewContent {
+    zoom: 1 !important;
+    padding: 0;
+  }
+}
+
+#resumePreviewContent {
+  font-family: "outfit", sans-serif;
+}
+
+@page {
+  size: A4;
+  margin: 0.6cm;
+}
