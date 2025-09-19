@@ -6,6 +6,7 @@ import { PlusSquare, FileText, ChevronRight, Sparkles } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import ResumeItem from "./ResumeItem";
+import CreateResumeButton from "./CreateResumeButton";
 
 export const metadata: Metadata = {
   title: "Your Resumes",
@@ -73,18 +74,7 @@ export default async function Page() {
 
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
               {/* New Resume Card */}
-              <div className="group">
-                <Link
-                  href="/editor"
-                  className="group-hover:border-accent-foreground/50 bg-accent flex h-full flex-col items-center justify-center rounded-xl border-2 border-dashed p-6 text-center transition-all hover:shadow-sm"
-                >
-                   <PlusSquare className="h-8 w-8" />
-                  <h3 className="font-medium">Create New Resume</h3>
-                  <p className="text-muted-foreground mt-1 text-sm">
-                    Start from scratch or use a template
-                  </p>
-                </Link>
-              </div>
+             <CreateResumeButton canCreate={totalCount < 3} />
 
               {/* Existing Resumes */}
               {resumes.map((resume) => (

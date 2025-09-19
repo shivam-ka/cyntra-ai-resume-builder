@@ -68,7 +68,7 @@ export default function ResumeItem({ resume }: ResumeItemProps) {
             contentRef={contentRef}
             className="overflow-hidden"
           />
-          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-full w-full" />
         </div>
       </div>
       <MoreMenu resumeId={resume.id} onPrintClick={reactToPrintFn} />
@@ -81,7 +81,7 @@ interface MoreMenuProps {
   onPrintClick: () => void;
 }
 
-function MoreMenu({ resumeId,onPrintClick }: MoreMenuProps) {
+function MoreMenu({ resumeId, onPrintClick }: MoreMenuProps) {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   return (
     <>
