@@ -2,11 +2,13 @@ import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/prisma";
 import { resumeDataInclude } from "@/lib/types";
 import { auth } from "@clerk/nextjs/server";
-import { PlusSquare, FileText, ChevronRight, Sparkles } from "lucide-react";
+import { PlusSquare, FileText, Sparkles } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import ResumeItem from "./ResumeItem";
 import CreateResumeButton from "./CreateResumeButton";
+import { getUserSubscriptionLevel } from "@/lib/subscription";
+import { canCreateResume } from "@/lib/permission";
 
 export const metadata: Metadata = {
   title: "Your Resumes",
@@ -19,7 +21,7 @@ export default async function Page() {
     return null;
   }
 
-  const [resumes, totalCount] = await Promise.all([
+  const [resumes, totalCount, subscriptionLevel] = await Promise.all([
     prisma.resume.findMany({
       where: {
         userId,
@@ -34,6 +36,7 @@ export default async function Page() {
         userId,
       },
     }),
+    getUserSubscriptionLevel(userId),
   ]);
 
   return (
@@ -69,12 +72,11 @@ export default async function Page() {
               <h2 className="text-xl font-semibold">
                 Your All Resumes ( {totalCount} )
               </h2>
-              
             </div>
 
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
               {/* New Resume Card */}
-             <CreateResumeButton canCreate={totalCount < 3} />
+              <CreateResumeButton canCreate={canCreateResume(subscriptionLevel, totalCount)} />
 
               {/* Existing Resumes */}
               {resumes.map((resume) => (

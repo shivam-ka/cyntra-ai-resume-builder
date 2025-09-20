@@ -50,8 +50,8 @@ export default function useAutoSaveResume(resumedata: ResumeValue) {
         }
       } catch (error) {
         setIsError(true);
+        toast.info("error saving data");
         console.error(error);
-        toast.dismiss("error saving data");
       } finally {
         setIsSaving(false);
       }
